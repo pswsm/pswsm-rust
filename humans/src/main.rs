@@ -1,7 +1,8 @@
-mod human;
+mod humans;
+use humans::human;
 
-use human::{
-    Human,
-};
-
-fn main() {}
+fn main() {
+    let blood: human::Blood = human::Blood::from(('a', ['a', 'a']));
+    let man: human::Human = human::Human::from((blood, "Pau", "Figueras", 18, 18));
+    println!("{}", man);
+}
