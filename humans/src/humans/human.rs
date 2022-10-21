@@ -14,6 +14,7 @@ impl From<(char, [char; 2])> for Blood {
         Blood { genotype: iterable.0.to_string(), fenotype: iterable.1.iter().map(|c| c.to_string()).collect() }
     }
 }
+
 pub struct Human {
     blood_type: Blood,
     first_name: String,
