@@ -1,6 +1,8 @@
-use bevy::prelude::*;
+use bevy::prelude::{
+    Camera2dBundle,
+    Commands
+};
 
 pub fn spawn_camera(mut commands: Commands) {
-    let camera: Camera2dBundle = Camera2dBundle::default();
-    commands.spawn_bundle(camera);
+    commands.spawn_bundle(Camera2dBundle::default());
 }

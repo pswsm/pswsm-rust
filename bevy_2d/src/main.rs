@@ -20,6 +20,6 @@ fn main() {
         .add_startup_system(player::spawn_player)
         .add_startup_system_to_stage(StartupStage::PreStartup, asset_manager::load_asset)
         .add_plugins(DefaultPlugins)
-        .add_plugin(entities::PeoplePlugin)
+        // .add_plugin(entities::PeoplePlugin)
         .run();
 }
