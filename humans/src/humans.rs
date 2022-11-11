@@ -1,45 +1,52 @@
+use std::str::FromStr;
+
+pub const BLOOD_TYPES: [&str; 4] = ["A", "B", "O", "AB"];
+
 #[derive(Debug)]
 pub enum BloodType {
     A,
     B,
-    O
+    O,
+    AB,
 }
 
 impl std::fmt::Display for BloodType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let btype: char = match self {
-            Self::A => 'A',
-            Self::B => 'B',
-            Self::O => 'O'
+        let btype: &str = match self {
+            Self::A => "A",
+            Self::B => "B",
+            Self::O => "O",
+            Self::AB => "AB",
         };
         write!(f, "{}", btype)
     }
 }
 
-pub struct Blood {
-  genotype: BloodType,
-  fenotype: BloodType,
-}
+impl FromStr for BloodType {
+    type Err = std::string::ParseError;
 
-impl std::fmt::Display for Blood {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.genotype)
-    }
-}
-
-impl From<(char, [char; 2])> for Blood {
-    fn from(iterable: (char, [char; 2])) -> Self {
-        Blood { genotype: iterable.0.to_string(), fenotype: iterable.1.iter().map(|c| c.to_string()).collect() }
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(match s {
+            "a" => Self::A,
+            "b" => Self::B,
+            "o" => Self::O,
+            "ab" => Self::AB,
+            "A" => Self::A,
+            "B" => Self::B,
+            "O" => Self::O,
+            "AB" => Self::AB,
+            _ => unreachable!(),
+        })
     }
 }
 
 pub struct Human {
-    blood_type: Blood,
+    blood_type: BloodType,
     first_name: String,
     last_name: String,
     natural_age: usize,
     biologic_age: usize,
-} 
+}
 
 impl std::fmt::Display for Human {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
@@ -47,8 +54,16 @@ impl std::fmt::Display for Human {
     }
 }
 
-impl<T: ToString> From<(Blood, T, T, usize, usize)> for Human {
-    fn from(data: (Blood, T, T, usize, usize)) -> Self {
-        Human { blood_type: data.0, first_name: data.1.to_string(), last_name: data.2.to_string(), natural_age: data.3, biologic_age: data.4 }
+impl<T> From<(&str, T, T, usize, usize)> for Human where 
+T: ToString
+{
+    fn from(data: (&str, T, T, usize, usize)) -> Self {
+        Human {
+            blood_type: BloodType::from_str(data.0).unwrap_or_else(|_| BloodType::O),
+            first_name: data.1.to_string(),
+            last_name: data.2.to_string(),
+            natural_age: data.3,
+            biologic_age: data.4,
+        }
     }
 }
