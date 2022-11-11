@@ -27,15 +27,11 @@ impl FromStr for BloodType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(match s {
-            "a" => Self::A,
-            "b" => Self::B,
-            "o" => Self::O,
-            "ab" => Self::AB,
             "A" => Self::A,
             "B" => Self::B,
             "O" => Self::O,
             "AB" => Self::AB,
-            _ => unreachable!(),
+            _ => unreachable!()
         })
     }
 }
@@ -50,7 +46,7 @@ pub struct Human {
 
 impl std::fmt::Display for Human {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.first_name)
+        write!(f, "{} {}", self.first_name, self.last_name)
     }
 }
 
@@ -59,7 +55,7 @@ T: ToString
 {
     fn from(data: (&str, T, T, usize, usize)) -> Self {
         Human {
-            blood_type: BloodType::from_str(data.0).unwrap_or_else(|_| BloodType::O),
+            blood_type: BloodType::from_str(data.0).unwrap_or(BloodType::O),
             first_name: data.1.to_string(),
             last_name: data.2.to_string(),
             natural_age: data.3,
