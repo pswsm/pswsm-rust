@@ -1,8 +1,10 @@
 use std::str::FromStr;
 
+use rand::{seq::SliceRandom, thread_rng};
+
 pub const BLOOD_TYPES: [&str; 4] = ["A", "B", "O", "AB"];
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum BloodType {
     A,
     B,
@@ -31,7 +33,7 @@ impl FromStr for BloodType {
             "B" => Self::B,
             "O" => Self::O,
             "AB" => Self::AB,
-            _ => unreachable!()
+            _ => unreachable!(),
         })
     }
 }
@@ -50,8 +52,9 @@ impl std::fmt::Display for Human {
     }
 }
 
-impl<T> From<(&str, T, T, usize, usize)> for Human where 
-T: ToString
+impl<T> From<(&str, T, T, usize, usize)> for Human
+where
+    T: ToString,
 {
     fn from(data: (&str, T, T, usize, usize)) -> Self {
         Human {
@@ -60,6 +63,18 @@ T: ToString
             last_name: data.2.to_string(),
             natural_age: data.3,
             biologic_age: data.4,
+        }
+    }
+}
+
+impl Human {
+    pub fn breed(p1: Human, p2: Human) -> Human {
+        Human {
+            blood_type: [p1.blood_type, p2.blood_type].choose(&mut thread_rng()).unwrap_or(&BloodType::O).clone(),
+            first_name: p1.first_name,
+            last_name: p2.last_name,
+            natural_age: 0,
+            biologic_age: 0,
         }
     }
 }
