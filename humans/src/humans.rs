@@ -42,7 +42,9 @@ pub struct Human {
     blood_type: BloodType,
     first_name: String,
     last_name: String,
+    #[allow(dead_code)]
     natural_age: usize,
+    #[allow(dead_code)]
     biologic_age: usize,
 }
 
