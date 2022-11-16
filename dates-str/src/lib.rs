@@ -1,3 +1,4 @@
+use std::fmt::Display;
 use std::vec::Vec;
 use std::marker::PhantomData;
 
@@ -24,6 +25,14 @@ where T: ToString
     }
 }
 
+impl<T> Display for DateStr<T>
+where T: Display
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}-{}-{}", self.year, self.month, self.day)
+    }
+}
+
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right
@@ -36,6 +45,6 @@ mod tests {
     #[test]
     fn test_iso_str() {
         let some_date: DateStr<_> = DateStr::from_iso_str("2022-11-16");
-        assert_eq!(some_date.year, 2022);
+        assert_eq!(some_date.to_string(), "2022-11-16".to_owned());
     }
 }
