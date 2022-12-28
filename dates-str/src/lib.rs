@@ -12,7 +12,6 @@ pub struct FormatDateError {
     fld: String
 }
 
-#[derive(PartialEq)]
 pub struct DateStr<T>
 where T: ToString
 {
@@ -52,7 +51,7 @@ where T: ToString
         let binding: String = fmt.to_string().to_uppercase();
         let format: Vec<&str> = binding.splitn(3, |sep| sep == '-' || sep == '/').collect();
         for formatter in format.iter() {
-            ensure!(allowed_formats.iter().any(|e| e.to_string() == formatter.to_string()), FormatDateSnafu { fld: formatter.to_string() })
+            ensure!(allowed_formats.iter().any(|e| *e.to_string() == *formatter.to_string()), FormatDateSnafu { fld: formatter.to_string() })
         }
         let formatted: Vec<String> = format.into_iter().map(|f| 
             match f {
@@ -64,7 +63,7 @@ where T: ToString
         if let Some(separator) = sep {
             return Ok(formatted.join(separator))
         }
-        return Ok(formatted.join("-"))
+        Ok(formatted.join("-"))
     }
 }
 
