@@ -1,3 +1,6 @@
 [submodule "fasta_cli_tools"]
 	path = fasta_cli_tools
 	url = https://github.com/pswsm/fasta_cli_tools.git
+[submodule "dates-str"]
+	path = dates-str
+	url = git@github.com:pswsm/dates-str.git
