@@ -1,8 +1,6 @@
-use std::str::FromStr;
-
+use dates_str::*;
 use rand::{seq::SliceRandom, thread_rng};
-
-pub const BLOOD_TYPES: [&str; 4] = ["A", "B", "O", "AB"];
+use std::str::FromStr;
 
 /// Blood types enum
 #[derive(Debug, Clone)]
@@ -43,10 +41,7 @@ pub struct Human {
     blood_type: BloodType,
     first_name: String,
     last_name: String,
-    #[allow(dead_code)]
-    natural_age: isize,
-    #[allow(dead_code)]
-    biologic_age: isize,
+    date_born: DateStr,
 }
 
 impl std::fmt::Display for Human {
@@ -55,17 +50,13 @@ impl std::fmt::Display for Human {
     }
 }
 
-impl<T> From<(&str, T, T, isize, isize)> for Human
-where
-    T: ToString,
-{
-    fn from(data: (&str, T, T, isize, isize)) -> Self {
+impl Human {
+    pub fn new<T: ToString>(blood_type: BloodType, first_name: T, last_name: T, date_born: T) -> Self {
         Human {
-            blood_type: BloodType::from_str(data.0).unwrap_or(BloodType::O),
-            first_name: data.1.to_string(),
-            last_name: data.2.to_string(),
-            natural_age: data.3,
-            biologic_age: data.4,
+            blood_type,
+            first_name: first_name.to_string(),
+            last_name: last_name.to_string(),
+            date_born: DateStr::from_iso_str(date_born),
         }
     }
 }
@@ -75,11 +66,13 @@ impl Human {
         Human {
             // TODO
             // Actual genetic inheritance, not just random select
-            blood_type: [p1.blood_type, p2.blood_type].choose(&mut thread_rng()).unwrap_or(&BloodType::O).clone(),
+            blood_type: [p1.blood_type, p2.blood_type]
+                .choose(&mut thread_rng())
+                .unwrap_or(&BloodType::O)
+                .clone(),
             first_name: p1.first_name,
             last_name: p2.last_name,
-            natural_age: 0,
-            biologic_age: 0,
+            date_born: DateStr::from_iso_str("2003-20-10"),
         }
     }
 }
