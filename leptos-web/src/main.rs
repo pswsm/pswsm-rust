@@ -10,6 +10,7 @@ fn App(cx: Scope) -> impl IntoView {
     let count_times_two = move || count.get() * 2;
 
     view! { cx,
+        // <Navbar title=String::from("Title") elements=vec![0, 1, 2]/>
         <button
             on:click=move |_| {
                 set_count.set(count.get() + 1);
